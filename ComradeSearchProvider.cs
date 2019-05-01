@@ -88,6 +88,10 @@ namespace Unity.QuickSearch {
                 {"help", "Help"},
                 {"cpp", "Clear Player Prefs"},
                 {"cl", "Clear Logs Console"},
+                {"rt", "Reset Transform"},
+                {"rtp", "Reset Transform Position"},
+                {"rtr", "Reset Transform Rotation"},
+                {"rts", "Reset Transform Scale"},
             };
             
             [UsedImplicitly, SearchItemProvider]
@@ -131,6 +135,22 @@ namespace Unity.QuickSearch {
                                 case "cl":
                                     ClearLog();
                                     break;
+
+                                case "rt":
+                                    ResetTransform(true, true, true);
+                                    break;
+
+                                case "rtp":
+                                    ResetTransform(true, false, false);
+                                    break;
+                                    
+                                case "rtr":
+                                    ResetTransform(false, true, false);
+                                    break;
+                                    
+                                case "rts":
+                                    ResetTransform(false, false, true);
+                                    break;
                             }
                             
                         }
@@ -143,6 +163,40 @@ namespace Unity.QuickSearch {
                 var aType = assembly.GetType("UnityEditor.LogEntries");
                 var method = aType.GetMethod("Clear");
                 method.Invoke(new object(), null);
+            }
+            
+            internal static void ResetTransform(bool isResetPosition, bool isResetRotation, bool isResetScale) {
+                foreach(Transform tr in Selection.transforms) {
+                    if (isResetPosition) {
+                        tr.localPosition = Vector3.zero;
+                        
+                        RectTransform rtr = tr.GetComponent<RectTransform>();
+                        if(rtr != null) {
+                            if (rtr.anchorMax.x != rtr.anchorMin.x) {
+                                Vector2 offsetMax = rtr.offsetMax;
+                                Vector2 offsetMin = rtr.offsetMin;
+                                offsetMax.x = 0f;
+                                offsetMin.x = 0f;
+                                rtr.offsetMax = offsetMax;
+                                rtr.offsetMin = offsetMin;
+                            }
+                                
+                            if(rtr.anchorMax.y != rtr.anchorMin.y) {
+                                Vector2 offsetMax = rtr.offsetMax;
+                                Vector2 offsetMin = rtr.offsetMin;
+                                offsetMax.y = 0f;
+                                offsetMin.y = 0f;
+                                rtr.offsetMax = offsetMax;
+                                rtr.offsetMin = offsetMin;
+                            }
+                        }
+                    }
+                        
+                    if (isResetRotation)
+                        tr.localRotation = Quaternion.identity;
+                    if (isResetScale)
+                        tr.localScale = Vector3.one;
+                }
             }
 
         }
