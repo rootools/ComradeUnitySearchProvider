@@ -128,7 +128,7 @@ namespace Unity.QuickSearch {
                         handler = (item, context) => {
 
                             switch(item.label) {
-                                case "rpp":
+                                case "cpp":
                                     PlayerPrefs.DeleteAll();
                                     break;
 
