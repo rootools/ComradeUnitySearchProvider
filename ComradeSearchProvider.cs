@@ -92,6 +92,7 @@ namespace Unity.QuickSearch {
                 {"rtp", "Reset Transform Position"},
                 {"rtr", "Reset Transform Rotation"},
                 {"rts", "Reset Transform Scale"},
+                {"sp", "Save Project"}
             };
             
             [UsedImplicitly, SearchItemProvider]
@@ -150,6 +151,10 @@ namespace Unity.QuickSearch {
                                     
                                 case "rts":
                                     ResetTransform(false, false, true);
+                                    break;
+
+                                case "sp":
+                                    AssetDatabase.SaveAssets();
                                     break;
                             }
                             
