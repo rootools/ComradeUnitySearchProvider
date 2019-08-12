@@ -19,7 +19,7 @@ namespace Unity.QuickSearch {
             [UsedImplicitly, SearchItemProvider]
             internal static SearchProvider CreateProvider() {
 
-                SearchProvider provider = new SearchProvider(type, displayName) {
+                return new SearchProvider(type, displayName) {
                     priority = 100,
                     filterId = "sc:",
                     
@@ -31,6 +31,7 @@ namespace Unity.QuickSearch {
                                                         .Where(path => !AssetDatabase.IsValidFolder(path))
                                                         .Take(1001)
                                                         .Select(path => _provider.CreateItem(path, Path.GetFileName(path))));
+                        return null;
                     },
                     
                     fetchDescription = (item, context) => {
@@ -60,8 +61,6 @@ namespace Unity.QuickSearch {
                         return item.thumbnail;
                     }
                 };
-                
-                return provider;
             }
 
             [UsedImplicitly, SearchActionsProvider]
@@ -109,7 +108,7 @@ namespace Unity.QuickSearch {
                         string query = context.searchQuery;
 
                         if (!CommandsDict.ContainsKey(query))
-                            return;
+                            return null;
 
                         if(query != "help")
                             items.Add(_provider.CreateItem(query, query, CommandsDict[query], Icons.settings));
@@ -117,6 +116,8 @@ namespace Unity.QuickSearch {
                             items.AddRange(CommandsDict.Where(item => item.Key != "help")
                                                        .Select(item => _provider.CreateItem(item.Key, item.Key, item.Value, Icons.settings)));
                         }
+
+                        return null;
                     }
                 };
             }
