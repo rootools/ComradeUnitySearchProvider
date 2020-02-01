@@ -111,10 +111,10 @@ namespace Unity.QuickSearch {
                             return null;
 
                         if(query != "help")
-                            items.Add(_provider.CreateItem(query, query, CommandsDict[query], Icons.settings));
+                            items.Add(_provider.CreateItem(query, query, CommandsDict[query]));
                         else {
                             items.AddRange(CommandsDict.Where(item => item.Key != "help")
-                                                       .Select(item => _provider.CreateItem(item.Key, item.Key, item.Value, Icons.settings)));
+                                                       .Select(item => _provider.CreateItem(item.Key, item.Key, item.Value)));
                         }
 
                         return null;
